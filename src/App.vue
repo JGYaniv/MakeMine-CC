@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.jpg">
-    <home />
+    <br/>
+    <b-img class="logo" alt="Vue logo" src="https://i.imgur.com/Qe5HUht.jpg" center></b-img>
+    <index />
   </div>
 </template>
 
@@ -11,84 +12,33 @@ import Index from './components/Index.vue'
 export default {
   name: 'App',
   components: {
-    home: Index
+    index: Index
   },
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 
-.active {
-  background-color: lightgoldenrodyellow;
-  padding: 1rem;
-}
-
-.inactive{ 
-  cursor: pointer; 
-  padding: .5rem;
-} 
-
-.inactive:hover { 
-  background: rgb(245, 245, 245);
+.logo { 
+  width: 50px; 
+  margin: 0 auto; 
 }
 
 .user-form {
-  width: 20rem;
-  margin: 0 auto;
-  text-align: left; 
-  margin-bottom: 2rem;
-}
-
-label {
-  display: block;
-}
-
-input[value="create"]{
-  padding: .5rem 1.5rem;
-  font-size: 1rem;
-}
-
-input[value="add"]{
-  margin-left: 1rem;
-}
-
-li {
-  list-style: none;
-}
-
-p {
-  margin: 0;
-  padding: 0;
-}
-
-.user-list {
-    position: relative;
-    text-align: left;
-    width: 25rem;
-    margin: 0 auto;
-    padding: 0;
+  max-width: 600px;
 }
 
 .sort-by{
-  position: absolute; 
-  right: 0;
   text-align: right;
+  width: 10rem;
+  margin: 0 0 0 auto;
 }
 
-.user-form p {
-  width: 6rem;
-  display: inline-block;
+.chevron {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  width: 20px;
 }
 
-img {
-  width: 50px;
-}
 </style>

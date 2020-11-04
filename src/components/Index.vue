@@ -1,93 +1,73 @@
 <template>
-  <div>
-    <form @submit="checkForm" class="user-form">
-      <label for="userName">
-        <p>Username: </p>
-        <input 
-          id="userName" 
-          v-model="userName" 
-          type="text" 
-          name="userName"
-        />
-      </label>
-      <label for="role">
-        <p>Role: </p>
-        <select 
-          id="role" 
-          v-model="role" 
-          name="role"
-        >
-          <option>lead</option>
-          <option>senior</option>
-          <option>junior</option>
-          <option>intern</option>
-        </select>
-      </label>
-      <label for="location">
-        <p>Location: </p>
-        <input 
-          id="location" 
-          v-model="location" 
-          type="text" 
-          name="location"
-        />
-      </label>
-      <label for="hobbies">
-        <p>Hobbies: </p>
-        <input
-          id="hobby"
-          type="hobby"
-          name="hobby"
-          v-model="hobby"
-        />
-        <input
-          type="submit"
-          value="add"
-          @click="addHobby"
-        />
-        <ul>
-          <li v-for="hobby in hobbies" :key="hobby">
-            {{hobby}}
-          </li>
-        </ul>
-      </label>
-      <input type="submit" value="create">
-      <p v-if="errors.length">
-        <b>Please correct the following error(s):</b>
-        <ul>
-          <li v-for="(error, idx) in errors" :key="idx">{{ error }}</li>
-        </ul>
-      </p>
-    </form>
-    <ul class="user-list">
-      <form class="sort-by">
-        <label for="sort">Sort by: 
-          <select
-            id="sorted" 
-            v-model="sorted"
-            name="sorted"
-          >
-            <option>Username (A-Z)</option>
-            <option>Username (Z-A)</option>
-            <option>Role (A-Z)</option>
-          </select>
-        </label>
-      </form>
-      <li v-for="(user, idx) in getUsers" 
-        :key="idx" 
-        @click="selected = idx" 
+<b-container class="user-form">
+  <b-form @submit="addUser">
+    <b-form-group label="Username:" label-for="userName">
+      <b-form-input
+        id="userName" 
+        v-model="userName" 
+        placeholder="..."
+        required
+      ></b-form-input>
+    </b-form-group>
+    <b-form-group label="Role:" label-for="role">
+      <b-form-select
+        id="role" 
+        v-model="role" 
+        :options="roles"
+        required
       >
-        <user-details v-if="selected === idx" 
-          v-bind:user="user" 
-          class="active" 
-        />
-        <user-list-item v-else 
-          v-bind:user="user"
-          class="inactive"
-        />
-      </li>
-    </ul>
-  </div>
+        <template #first> 
+          <b-form-select-option :value="null" disabled>-- select --</b-form-select-option>
+        </template>
+      </b-form-select>
+    </b-form-group>
+    <b-form-group label="Location:" label-for="location">
+      <b-form-input
+        id="location" 
+        v-model="location" 
+        placeholder="..."
+        required
+      ></b-form-input>
+    </b-form-group>
+    <b-form-group label="Hobbies" label-for="hobbies">
+      <b-form-tags v-model="hobbies" 
+        remove-on-delete placeholder="..." 
+        separator=" ,;" 
+        tag-variant="primary" 
+        tag-pills
+        size="lg"
+      ></b-form-tags>
+    </b-form-group>
+    <b-button type="submit" variant="primary">Submit</b-button>
+  </b-form>
+  <b-form class="sort-by">
+    <b-form-group label="Sort by:" for="sort">
+      <b-form-select
+        id="sorted" 
+        v-model="sorted"
+        name="sorted"
+        :options="sortOptions"
+      ></b-form-select>
+    </b-form-group>
+  </b-form>
+  <b-list-group>
+    <b-list-group-item v-for="(user, idx) in getUsers" 
+      :key="idx" 
+      @click="selected = idx" 
+      :active="selected === idx"
+    >
+      <div style="text-align:end;">
+        <b-icon :icon="selected === idx ? 'chevron-down' : 'chevron-right'" right/>
+      </div>
+      <user-details v-if="selected === idx" 
+        v-bind:user="user" 
+      />
+      <user-list-item v-else 
+        v-bind:user="user"
+      />
+    </b-list-group-item>
+  </b-list-group>
+</b-container>
 </template>
 
 <script>
@@ -104,10 +84,10 @@ export default {
       role: null, 
       location: null, 
       hobbies: [],
-      hobby: "",
       selected: null,
-      errors: [],
-      sorted: null
+      sorted: null,
+      roles: ["senior", "junior", "intern", "lead"],
+      sortOptions: ["Username (A-Z)","Username (Z-A)","Role (A-Z)"]
     }
   },
   computed: {
@@ -142,36 +122,16 @@ export default {
         location: this.location, 
         hobbies: this.hobbies.slice()
       }
+      
+      this.userName = null
+      this.role = null
+      this.location = null
+      this.hobbies = []
 
       e.preventDefault();
       this.users.push(user)
       window.users = this.users
       return this.users
-    },
-    addHobby: function(e){
-      const newHobby = this.hobby
-      e.preventDefault()
-      this.hobbies.push(newHobby)
-      this.hobby = ""
-    },
-    checkForm: function(e){
-      this.errors = []
-      e.preventDefault()
-      if (this.userName && !this.userNames.has(this.userName) && this.role && this.location) {
-        this.addUser(e)
-        this.userNames.add(this.userName)
-        this.userName = ''
-        this.role = ''
-        this.location = ''
-        this.hobbies = []
-        window.usersNames = this.userNames
-        return true
-      }
-      this.errors = []
-      if (!this.userName) this.errors.push('username required')
-      if (this.userNames.has(this.userName)) this.errors.push('username taken')
-      if (!this.role) this.errors.push('role required')
-      if (!this.location) this.errors.push('location required')
     }
   }
 }

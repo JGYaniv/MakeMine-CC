@@ -6,7 +6,7 @@
     <label>hobbies:
       <ul>
         <li v-for="(hobby, idx) of user.hobbies" :key="idx">
-          - {{hobby}}
+          {{hobby}}
         </li>
       </ul>
     </label>
