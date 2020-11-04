@@ -2,16 +2,19 @@
   <div id="app">
     <br/>
     <b-img class="logo" alt="Vue logo" src="https://i.imgur.com/Qe5HUht.jpg" center></b-img>
+    <userForm />
     <index />
   </div>
 </template>
 
 <script>
-import Index from './components/Index.vue'
+import UserForm from './components/UserForm'
+import Index from './components/Index'
 
 export default {
   name: 'App',
   components: {
+    userForm: UserForm,
     index: Index
   },
 }
@@ -28,17 +31,28 @@ export default {
   max-width: 600px;
 }
 
-.sort-by{
+.sort-by {
   text-align: right;
   width: 10rem;
   margin: 0 0 0 auto;
 }
 
-.chevron {
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
-  width: 20px;
+.user-details {
+  position: relative;
+  text-align: left;
 }
 
+.details-menu {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.user-list-item{
+  text-align: left;
+}
+
+.index {
+  max-width: 600px;
+}
 </style>

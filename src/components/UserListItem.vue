@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  class="user-list-item" >
     <p>username: {{user.userName}}</p>
     <p>role: {{user.role}}</p>
   </div>
